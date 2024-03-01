@@ -5,44 +5,18 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-//REMEMBER: THE MAX LINE COUNT IS 24
-
 public class TEXT_Display : MonoBehaviour
 {
     public TextMeshProUGUI leftDisplay;
-    public TextMeshProUGUI rightDisplay;
+    public TextMeshProUGUI topDisplay;
+    public TextMeshProUGUI bottomDisplay;
 
     // Start is called before the first frame update
     void Start()
     {
         //UpdateText(false, true, "Hello World \nlol");
-        rightDisplay.alignment = TextAlignmentOptions.Center;
-        UpdateText(true, true, "Dumb\nDungeons\n\n\n\nPress Space to Start");
+        topDisplay.alignment = TextAlignmentOptions.Center;
+        UpdateText(true, 0, "Dumb\nDungeons\n\n\n\nPress Space to Start");
     }
 
     // Update is called once per frame
@@ -51,15 +25,19 @@ public class TEXT_Display : MonoBehaviour
         //UpdateText(true, true, "a");
     }
 
-    internal void UpdateText(bool Append, bool onLeft, string Text)
+    internal void UpdateText(bool Append, int disp, string Text)
     {
-        if (onLeft)
+        switch (disp)
         {
-            if (Append) { leftDisplay.text += Text; return; }
-            leftDisplay.text = Text; return;
-        } else {
-            if(Append) { rightDisplay.text += Text; return; }
-            rightDisplay.text = Text; return;
+            case 0:
+                if (Append) { leftDisplay.text += Text; return; }
+                leftDisplay.text = Text; return;
+            case 1:
+                if (Append) { topDisplay.text += Text; return; }
+                topDisplay.text = Text; return;
+            case 2:
+                if (Append) { bottomDisplay.text += Text; return; }
+                bottomDisplay.text = Text; return;
         }
     }
 }

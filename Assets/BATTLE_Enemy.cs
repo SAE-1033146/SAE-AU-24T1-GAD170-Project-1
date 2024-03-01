@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class BATTLE_Enemy : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    Dictionary<string, int> enemyStats = new Dictionary<string, int>();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    internal void generateEnemy()
+    { 
     }
 }
