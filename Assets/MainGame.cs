@@ -10,8 +10,15 @@ public class MainGame : MonoBehaviour
     int Y = 0;
     bool debug = true;
 
+    public int floorLevel = 0;
+
     int movesTakenMAP = 0;
     int movesTakenFIGHT = 0;
+
+    public FLOOR_Main floorGen;
+    public BATTLE_Enemy enemyGen;
+    //public BATTLE_Player playerGen;
+    public TEXT_Display gameDisplay;
 
     Dictionary<int, int> gameFloor = new Dictionary<int, int>();
     Dictionary<string, int> gameInventory = new Dictionary<string, int>();
@@ -49,7 +56,7 @@ public class MainGame : MonoBehaviour
             gameStarted = true;
             pointSelect = true;
             Step();
-            gameFloor = this.GetComponent<FLOOR_Main>().GenerateFloor(7, 0.2);
+            gameFloor = floorGen.GenerateFloor(7, 0.2);
             
         }
 
@@ -71,7 +78,7 @@ public class MainGame : MonoBehaviour
                     if (debug && Input.GetKeyDown(KeyCode.X))
                     {
                         pos = 35;
-                        gameFloor = this.GetComponent<FLOOR_Main>().GenerateFloor(10, 0.8);
+                        gameFloor = floorGen.GenerateFloor(10, 0.8);
                         Step();
                     }
                 if (Input.GetKeyDown(KeyCode.LeftArrow) && gameFloor.ContainsKey(pos - 1) && X > 1)
@@ -103,8 +110,8 @@ public class MainGame : MonoBehaviour
     {
         if (pointSelect)
         {
-            this.GetComponent<TEXT_Display>().UpdateText(false, 0, "Z - Defense - " + gameStats["Defense"] + "\nX - Strength - " + gameStats["Strength"] + "\nC - Agility - " + gameStats["Agility"]);
-            this.GetComponent<TEXT_Display>().UpdateText(false, 1, "Upgrade your stats, dummy.\nPoints remaining: " + gameStats["Points"]);
+            gameDisplay.UpdateText(false, 0, "Z - Defense - " + gameStats["Defense"] + "\nX - Strength - " + gameStats["Strength"] + "\nC - Agility - " + gameStats["Agility"]);
+            gameDisplay.UpdateText(false, 1, "Upgrade your stats, dummy.\nPoints remaining: " + gameStats["Points"]);
             return;
         }
         if (mapRoaming)
@@ -112,10 +119,10 @@ public class MainGame : MonoBehaviour
             X = pos % 10;
             Y = pos / 10;
 
-            this.GetComponent<TEXT_Display>().UpdateText(false, 0, "X=" + X + "\nY=" + Y);
-            if (gameInventory["RevealRoom"] > 0) { this.GetComponent<TEXT_Display>().UpdateText(true, 0, "\n\n\nRoom Reveals: " + gameInventory["RevealRoom"]); }
-            this.GetComponent<TEXT_Display>().UpdateText(false, 1, this.GetComponent<FLOOR_Main>().displayFloor(pos));
-            this.GetComponent<TEXT_Display>().UpdateText(false, 2, "");
+            gameDisplay.UpdateText(false, 0, "X=" + X + "\nY=" + Y);
+            if (gameInventory["RevealRoom"] > 0) { gameDisplay.UpdateText(true, 0, "\n\n\nRoom Reveals: " + gameInventory["RevealRoom"]); }
+            gameDisplay.UpdateText(false, 1, floorGen.displayFloor(pos));
+            gameDisplay.UpdateText(false, 2, "");
 
             switch (gameFloor[pos])
             {
@@ -125,17 +132,17 @@ public class MainGame : MonoBehaviour
                     break;
                 case 2: //item
                     int rand = Random.Range(0, potionTypes.Count);
-                    this.GetComponent<TEXT_Display>().UpdateText(true, 2, "Picked up.. " + potionTypes[rand]  + "!\n");
+                    gameDisplay.UpdateText(true, 2, "Picked up.. " + potionTypes[rand]  + "!\n");
                     gameInventory[potionTypes[rand]]++;
                     gameFloor[pos] = 0;
-                    if (gameInventory["RevealRoom"] == 1) { this.GetComponent<TEXT_Display>().UpdateText(true, 0, "\n\n\nRoom Reveals: 1"); }
+                    if (gameInventory["RevealRoom"] == 1) { gameDisplay.UpdateText(true, 0, "\n\n\nRoom Reveals: 1"); }
                     break;
                 case 3: //enemy
                     mapRoaming = false;
                     inBattle = true;
-                    this.GetComponent<TEXT_Display>().UpdateText(false, 0, "Z - Attack\nX - Defend\nC - Item");
-                    this.GetComponent<TEXT_Display>().UpdateText(false, 1, "Your Stats:\nDefense - " + gameStats["Defense"] + "\nStrength - " + gameStats["Strength"] + "\nAgility - " + gameStats["Agility"]);
-                    this.GetComponent<TEXT_Display>().UpdateText(false, 2, "You've encountered an enemy!");
+                    gameDisplay.UpdateText(false, 0, "Z - Attack\nX - Defend\nC - Item");
+                    gameDisplay.UpdateText(false, 1, "Your Stats:\nDefense - " + gameStats["Defense"] + "\nStrength - " + gameStats["Strength"] + "\nAgility - " + gameStats["Agility"]);
+                    gameDisplay.UpdateText(false, 2, "You've encountered an enemy!");
                     break;
                 case 4: //exit
                     break;
