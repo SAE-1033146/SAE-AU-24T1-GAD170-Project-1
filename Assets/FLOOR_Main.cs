@@ -22,7 +22,7 @@ public class FLOOR_Main : MonoBehaviour
         
     }
 
-    internal String displayFloor(int position)
+    internal String displayFloor(int position, bool revealed)
     {
         //int X = position % 10;
         //int Y = position / 10; 
@@ -52,9 +52,9 @@ public class FLOOR_Main : MonoBehaviour
                             res = "_";
                             break;
                         case 2:
+                            if (revealed) { res = "*"; break; } else { res = "?"; break; }
                         case 3:
-                            res = "?";
-                            break;
+                            if (revealed) { res = "!"; break; } else { res = "?"; break; }
                         case 4:
                             res = "X";
                             break;
@@ -89,7 +89,7 @@ public class FLOOR_Main : MonoBehaviour
 
         cachedFloor.Add(35, 1);
 
-        int roomsLeft = ((int)(level * 2.6f) + UnityEngine.Random.Range(0, 2) + 5);
+        int roomsLeft = Math.Min(((int)(level * 2.6f) + UnityEngine.Random.Range(0, 2) + 5), 45);
 
         //this.GetComponent<TEXT_Display>().UpdateText(true, true, "Room Count set to:" + roomsLeft + "\n");
         int thingsLeft = (int)Math.Ceiling((float)roomsLeft / 3);
@@ -224,7 +224,7 @@ public class FLOOR_Main : MonoBehaviour
 
             }
         }
-
+        this.GetComponent<MainGame>().floorLevel++;
         return cachedFloor;
     }
 }
