@@ -72,7 +72,7 @@ public class MainGame : MonoBehaviour
 
         txtDisplay.UpdateText(false, 0, "Dumb\nDungeons\n\n\n\nPress Space to Start");
         txtDisplay.UpdateText(false, 1, "");
-        txtDisplay.UpdateText(false, 2, "You Died!\nYour final score was: " + gameStats["Score"]);
+        txtDisplay.UpdateText(false, 2, "You Died!\nYou perished on floor " + floorLevel + "\nYour final score was: " + gameStats["Score"] + "\nYou were at level " + gameStats["Level"]);
 
         gameStats["Health"] = 100;
         gameStats["Points"] = 30;
@@ -328,6 +328,7 @@ public class MainGame : MonoBehaviour
             inBattle = false;
             double xpGained = enemy["Strength"] + enemy["MAgility"] / (enemy["Defense"] / 5);
             txtDisplay.UpdateText(true, 2, "\nYou beat the enemy and get " + Math.Round(xpGained, 1) + " XP.");
+            gameStats["Health"] += (100 + (45 * gameStats["Level"]))/20;
             bool leveled = false;
             gameStats["XP"] += xpGained;
             while (gameStats["XP"] > (10 * Math.Pow(1.5, gameStats["Level"]))) //so you can level up multiple times juuuust in case
@@ -424,7 +425,7 @@ public class MainGame : MonoBehaviour
                     break;
                 case 4: //exit
                     globalDifficulty = Math.Min(0.9, globalDifficulty + (UnityEngine.Random.Range(1, 100) / 1000));
-                    gameStats["Score"] = (10000 * globalDifficulty) - (movesTakenMAP*10) - (movesTakenFIGHT*3);
+                    gameStats["Score"] = (10000 * gameStats["Level"] * globalDifficulty) - (movesTakenMAP*10) - (movesTakenFIGHT*3);
                     pos = 35;
                     gameFloor = floorGen.GenerateFloor(floorLevel+1, globalDifficulty);
                     roomRevealed = false;
