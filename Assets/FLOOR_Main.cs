@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class FLOOR_Main : MonoBehaviour
 {
-    public TEXT_Display gameDisplay;
-
     Dictionary<int, int> cachedFloor = new Dictionary<int, int>();
     //FlooXY, Floor Contents
     // Start is called before the first frame update
@@ -114,7 +112,7 @@ public class FLOOR_Main : MonoBehaviour
 
             if (DEBUG_NumAttempts == 0)
             {
-                gameDisplay.UpdateText(true, 1, "LIMIT HIT");
+                this.GetComponent<TEXT_Display>().UpdateText(true, 1, "LIMIT HIT");
                 break; //todo, try and restart the function if hit
             }
 
@@ -226,8 +224,6 @@ public class FLOOR_Main : MonoBehaviour
 
             }
         }
-
-        //floorLevel++;
 
         return cachedFloor;
     }
