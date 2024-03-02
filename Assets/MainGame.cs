@@ -61,7 +61,7 @@ public class MainGame : MonoBehaviour
         gameStats["Score"] = 0;
 
         gameInventory["RevealRoom"] = 0;
-        gameInventory["RevealEnemy"] = 1;
+        gameInventory["RevealEnemy"] = 0;
         gameInventory["DefenseUp"] = 1;
         gameInventory["StrengthUp"] = 1;
         gameInventory["AgilityUp"] = 1;
@@ -69,7 +69,44 @@ public class MainGame : MonoBehaviour
     }
     void resetGame()
     {
-    }
+
+        txtDisplay.UpdateText(false, 0, "Dumb\nDungeons\n\n\n\nPress Space to Start");
+        txtDisplay.UpdateText(false, 1, "");
+        txtDisplay.UpdateText(false, 2, "You Died!\nYour final score was: " + gameStats["Score"]);
+
+        gameStats["Health"] = 100;
+        gameStats["Points"] = 30;
+        gameStats["Defense"] = 10;
+        gameStats["Strength"] = 10;
+        gameStats["Agility"] = 10;
+        gameStats["BDefense"] = 1;
+        gameStats["BStrength"] = 1;
+        gameStats["BAgility"] = 1;
+        gameStats["XP"] = 0;
+        gameStats["Level"] = 1;
+        gameStats["Score"] = 0;
+
+        gameInventory["RevealRoom"] = 0;
+        gameInventory["RevealEnemy"] = 0;
+        gameInventory["DefenseUp"] = 1;
+        gameInventory["StrengthUp"] = 1;
+        gameInventory["AgilityUp"] = 1;
+
+        mapRoaming = false;
+        inBattle = false;
+        pointSelect = false;
+        choosingItem = false;
+        revealedEnemy = false;
+        noPotions = false;
+        tooTired = false;
+        roomRevealed = false;
+        gameStarted = false;
+
+        pos = 35;
+        floorLevel = 0;
+        movesTakenMAP = 0;
+        movesTakenFIGHT = 0;
+}
     // Update is called once per frame
     void Update()
     {
@@ -78,6 +115,7 @@ public class MainGame : MonoBehaviour
             gameStarted = true;
             pointSelect = true;
             Step();
+            txtDisplay.UpdateText(false, 2, "");
             gameFloor = floorGen.GenerateFloor(floorLevel+1, globalDifficulty);
             
         }
@@ -200,6 +238,7 @@ public class MainGame : MonoBehaviour
         //txtDisplay.UpdateText(false, 2, "You " + choice + ".");
         enemyMove = enemyGen.BATTLE_AI(choice);
         //print(enemyMove);
+        movesTakenFIGHT++;
         doDamage(choice, enemyMove);
     }
     void doDamage(string playerChoice, string enemyChoice)
@@ -280,7 +319,7 @@ public class MainGame : MonoBehaviour
         if (gameStats["Health"] <= 0)
         {
             resetGame();
-            txtDisplay.UpdateText(true, 2, "\nAh Fuck I've been Killed.");
+            //txtDisplay.UpdateText(true, 2, "\nAh Fuck I've been Killed.");
             return;
         }
 
@@ -386,12 +425,13 @@ public class MainGame : MonoBehaviour
                 case 4: //exit
                     globalDifficulty = Math.Min(0.9, globalDifficulty + (UnityEngine.Random.Range(1, 100) / 1000));
                     gameStats["Score"] = (10000 * globalDifficulty) - (movesTakenMAP*10) - (movesTakenFIGHT*3);
-                    movesTakenMAP = 0;
-                    movesTakenFIGHT = 0;
                     pos = 35;
                     gameFloor = floorGen.GenerateFloor(floorLevel+1, globalDifficulty);
                     roomRevealed = false;
                     Step();
+                    txtDisplay.UpdateText(false, 2, "You make it out of the floor.\nGoing deeper.\nSteps Taken: " + movesTakenMAP + "\nBattle Moves taken: " + movesTakenFIGHT);
+                    movesTakenMAP = 0;
+                    movesTakenFIGHT = 0;
                     break;
             }
             return;
